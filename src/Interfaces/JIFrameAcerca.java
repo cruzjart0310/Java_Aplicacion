@@ -50,7 +50,7 @@ public class JIFrameAcerca extends javax.swing.JInternalFrame {
 
         jLabel3.setFont(new java.awt.Font("Arial Narrow", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Año de creacion y desarrollo: 2014 ");
+        jLabel3.setText("Año de creacion y desarrollo: 2015");
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
