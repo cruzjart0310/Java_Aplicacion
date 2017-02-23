@@ -1,25 +1,20 @@
 package Interfaces;
+
 import Clases.ClUsuarios;
-import static Interfaces.JIFrameEjemplar.txtAutor;
-import static Interfaces.JIFrameEjemplar.txtCantidad;
-import static Interfaces.JIFrameEjemplar.txtClasificacion;
-import static Interfaces.JIFrameEjemplar.txtEditorial;
-import static Interfaces.JIFrameEjemplar.txtIbsn;
-import static Interfaces.JIFrameEjemplar.txtTitulo;
-import javax.swing.JOptionPane;
+import javax.swing.JOptionPane; 
 
 public class JIFrameRegistros extends javax.swing.JInternalFrame {
 
     //Creamos un objeto de tipo ClUsuario
     ClUsuarios miUsuario;
-    
+
     public JIFrameRegistros() {
         initComponents();
-        miUsuario= new ClUsuarios();
+        miUsuario = new ClUsuarios();
     }
-    
+
     //funcion para limpiar los campos
-    public void LimpiarCampos(){
+    public void LimpiarCampos() {
         txtMatricula.setText("");
         txtNombre.setText("");
         txtApellidos.setText("");
@@ -253,25 +248,23 @@ public class JIFrameRegistros extends javax.swing.JInternalFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        //Con estas lineas validamos si es un alumno en su caso un catedratico.
         String tipoUsuario;
-         if (txtMatricula.getText().equals("") || txtNombre.getText().equals("") || txtApellidos.getText().equals("")) {
+        if (txtMatricula.getText().equals("") || txtNombre.getText().equals("") || txtApellidos.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Rellene todos los campos", "Msj.", JOptionPane.WARNING_MESSAGE);
 
-        }else
-        if (cbxGrado.getSelectedItem().equals("Seleccione") || cbxGrado.getSelectedItem().equals("Carrera") || cbxGrado.getSelectedItem().equals("Cuatrimestre")) {
+        } else if (cbxGrado.getSelectedItem().equals("Seleccione") || cbxGrado.getSelectedItem().equals("Carrera") || cbxGrado.getSelectedItem().equals("Cuatrimestre")) {
             tipoUsuario = "Catedratico";
-            if(
-            miUsuario.NuevoUsuario(txtMatricula.getText(),txtNombre.getText(),txtApellidos.getText(),null,
-                   null, null, tipoUsuario)==true){
-                JOptionPane.showMessageDialog(this, "Registro exitoso","Msj.",JOptionPane.INFORMATION_MESSAGE);
+            if (miUsuario.NuevoUsuario(txtMatricula.getText(), txtNombre.getText(), txtApellidos.getText(), null,
+                    null, null, tipoUsuario,0) == true) {
+                JOptionPane.showMessageDialog(this, "Registro exitoso", "Msj.", JOptionPane.INFORMATION_MESSAGE);
                 LimpiarCampos();
             }
         } else {
             tipoUsuario = "Alummno";
-            if(
-            miUsuario.NuevoUsuario(txtMatricula.getText(),txtNombre.getText(),txtApellidos.getText(),cbxCarrera.getSelectedItem().toString(),
-                    cbxGrado.getSelectedItem().toString(), cbxGrupo.getSelectedItem().toString(), tipoUsuario)==true){
-                JOptionPane.showMessageDialog(this, "Registro exitoso","Msj.",JOptionPane.INFORMATION_MESSAGE);
+            if (miUsuario.NuevoUsuario(txtMatricula.getText(), txtNombre.getText(), txtApellidos.getText(), cbxCarrera.getSelectedItem().toString(),
+                    cbxGrado.getSelectedItem().toString(), cbxGrupo.getSelectedItem().toString(), tipoUsuario,0) == true) {
+                JOptionPane.showMessageDialog(this, "Registro exitoso", "Msj.", JOptionPane.INFORMATION_MESSAGE);
                 LimpiarCampos();
             }
         }

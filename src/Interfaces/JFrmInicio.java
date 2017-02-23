@@ -7,7 +7,6 @@
 package Interfaces;
 
 import javax.swing.JFrame;
-import org.jvnet.substance.SubstanceLookAndFeel;
 import Clases.ClHoraFecha;
 import java.awt.Image;
 import java.awt.Toolkit;

@@ -70,6 +70,7 @@ public class ClGeneradorClaves {
             ResultSet RS = PS.executeQuery();
             RS.next();
             if (RS.getString("codigo") != null) {
+                
                 Scanner s = new Scanner(RS.getString("codigo"));
                 int c = s.useDelimiter("0").nextInt() + 1;
 

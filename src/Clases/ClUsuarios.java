@@ -103,12 +103,12 @@ public class ClUsuarios {
 
 
     //Registra un nuevo usuario
-    public boolean NuevoUsuario(String idUsuario, String nombre, String apellido, String carrera, String grado,String grupo, String tipousuario) {
+    public boolean NuevoUsuario(String idUsuario, String nombre, String apellido, String carrera, String grado,String grupo, String tipousuario,int numPre) {
         try {
             //Uso del patron singleton
             ClConexion.getInstance();
             //Se arma la consulta
-            PS = ClConexion.conex.prepareStatement("INSERT INTO usuario VALUES(?,?,?,?,?,?,?);");
+            PS = ClConexion.conex.prepareStatement("INSERT INTO usuario VALUES(?,?,?,?,?,?,?,?);");
             PS.setString(1, idUsuario);
             PS.setString(2, nombre);
             PS.setString(3, apellido);
@@ -116,6 +116,7 @@ public class ClUsuarios {
             PS.setString(5, grado);
             PS.setString(6, grupo);
             PS.setString(7, tipousuario);
+            PS.setInt(8, numPre);
             PS.execute();
             return true;
         } catch (Exception e) {

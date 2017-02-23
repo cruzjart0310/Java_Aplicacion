@@ -310,6 +310,7 @@ public class JIFrameEjemplar extends javax.swing.JInternalFrame {
             }
             LimpiarCampos();
         }
+        dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
@@ -325,6 +326,7 @@ public class JIFrameEjemplar extends javax.swing.JInternalFrame {
             LimpiarCampos();
             JIFrameConsultaEjemplares.tblEjemplar.setModel(objEjemplar.ConsultaEjemplar());
         }
+        dispose();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
@@ -334,6 +336,7 @@ public class JIFrameEjemplar extends javax.swing.JInternalFrame {
         LimpiarCampos();
         JIFrameConsultaEjemplares.tblEjemplar.setModel(objEjemplar.ConsultaEjemplar());
         }
+        dispose();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

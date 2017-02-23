@@ -26,7 +26,7 @@ public class ClPrestamos {
             PS.setString(3, idUsuario);
             PS.execute();
         } catch (SQLException e) {//Para cachar u obtener posibles errores
-            System.err.println("Error al insertar datos : " + e);
+            System.err.println("Error al insertar datos:" + e);
             return false;
         }
 
@@ -81,12 +81,18 @@ public class ClPrestamos {
             ClConexion.getInstance();
             //Se arma la cONsulta
              ST = ClConexion.conex.createStatement();
-             RS = ST.executeQuery("SELECT pr.IdPrestamo,pr.FechaPrestamo,us.Nombre,us.Apellidos,us.Carrera,us.Grado,us.Grupo,sum(cantidadPrestada) as totalPrestamo,us.NumPrestamo from prestamo as pr\n"
+             RS = ST.executeQuery("SELECT pr.IdPrestamo,pr.FechaPrestamo,us.Nombre,us.Apellidos,us.Carrera,us.Grado,us.Grupo,sum(cantidadPrestada) as totalPrestamo,count(pr.IdPrestamo) as NumPrestamos from prestamo as pr\n"
                     + " INNER JOIN detalleprestamo as dp on dp.IdPrestamo= pr.IdPrestamo\n"
                     + " INNER JOIN usuario as us on us.idUsuario=pr.IdUsuario\n"
-                    + " WHERE dp.CantidadPrestada>0 and Nombre LIKE CONCAT('%" + nombre + "%')\n"
+                    + " WHERE dp.CantidadPrestada>0 and pr.IdUsuario LIKE CONCAT('%" + nombre + "%')\n"
                     + " GROUP BY us.idUsuario\n"
                     + " ORDER BY pr.IdPrestamo;");
+             
+//             //Intenetando traer solo unos datos
+//             RS= ST.executeQuery("select count(idprestamo) from prestamo as pr \n"
+//                     + " inner join usuario as us on us.idUsuario= pr.IdUsuario\n" 
+//                     + "where us.idusuario =idusuario and nombre=nombre");
+             
             int i = 0;
             while (RS.next()) {
                 dato[i][0] = RS.getString("FechaPrestamo");
@@ -95,7 +101,7 @@ public class ClPrestamos {
                 dato[i][3] = RS.getString("Carrera");
                 dato[i][4] = RS.getString("Grado")+ " / " +RS.getString("Grupo");
                 dato[i][5] = RS.getString("totalPrestamo");
-                dato[i][6] = RS.getString("NumPrestamo");
+                dato[i][6] = RS.getString("NumPrestamos");
                 i++;
             }
             RS.close();

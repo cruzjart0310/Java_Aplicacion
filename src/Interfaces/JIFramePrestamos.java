@@ -25,6 +25,7 @@ public class JIFramePrestamos extends javax.swing.JInternalFrame {
     ClUsuarios objUsuario;
     ClPrestamos objPrestamo;
     ClEjemplar objEjemplar;
+    String CantLibroPrestamos = "";
 
     /**
      * Creates new form JIFramePrestamos
@@ -93,8 +94,46 @@ public class JIFramePrestamos extends javax.swing.JInternalFrame {
                 objPrestamo.ActualizarExistenciaMin(Integer.parseInt(String.valueOf(tblDetPrestamos.getValueAt(fila, 3))), String.valueOf(tblDetPrestamos.getValueAt(fila, 1)));
 
             }
+            JOptionPane.showMessageDialog(this, "Prestámo ejecutado con éxito.", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
             limpiarTabla();
         }
+    }
+
+    public boolean VerificarArticuloRegistradoTabla() {
+        boolean valor = false;
+        if (this.tblDetPrestamos.getRowCount() > 0) {
+            int fila = this.tblDetPrestamos.getRowCount();
+            
+            DefaultTableModel detalle = (DefaultTableModel) this.tblDetPrestamos.getModel();
+            DefaultTableModel ejemplar = (DefaultTableModel) this.tblEjemplar.getModel(); 
+            
+            int val=0;
+            
+            for (int f = 0; f < fila; f++) {
+                        //Validamos que el registro este en la tabla detalle(Esta linea  de codigo no funciona del todo bien)
+                if (tblEjemplar.getValueAt(tblEjemplar.getSelectedRow(), 0).equals(String.valueOf(tblEjemplar.getValueAt(f, 0)))) {
+                    //JOptionPane.showMessageDialog(this, tblEjemplar.getValueAt(tblEjemplar.getSelectedRow(), 0));
+                    valor = true;
+                }
+            }
+        }
+        return valor;
+    }
+
+    public void ActualizarCantidadProdTabla(String codigo, String cantAPrestar) {
+        int sumaCantTabla = 0;
+        int fila = this.tblDetPrestamos.getRowCount();
+        DefaultTableModel modelo = (DefaultTableModel) this.tblDetPrestamos.getModel();
+        for (int f = 0; f < fila; f++) {
+            if (codigo.equals(String.valueOf(modelo.getValueAt(f, 1)))) {
+                sumaCantTabla = Integer.parseInt(String.valueOf(cantAPrestar)) + Integer.parseInt(String.valueOf(modelo.getValueAt(f, 3)));
+                modelo.setValueAt(String.valueOf(sumaCantTabla), f, 3);
+                
+                //JOptionPane.showMessageDialog(this,sumaCantTabla);
+            }
+        }
+        
+        //JOptionPane.showMessageDialog(this,sumaCantTabla);
     }
 
     /**
@@ -128,6 +167,7 @@ public class JIFramePrestamos extends javax.swing.JInternalFrame {
         tblEjemplar = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         txtFecha = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         panel4 = new org.edisoncor.gui.panel.Panel();
         jLabel2 = new javax.swing.JLabel();
         txtAdministrador = new javax.swing.JTextField();
@@ -311,6 +351,13 @@ public class JIFramePrestamos extends javax.swing.JInternalFrame {
         txtFecha.setForeground(new java.awt.Color(255, 255, 255));
         txtFecha.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
 
+        jButton1.setText("add");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panel3Layout = new javax.swing.GroupLayout(panel3);
         panel3.setLayout(panel3Layout);
         panel3Layout.setHorizontalGroup(
@@ -327,6 +374,8 @@ public class JIFramePrestamos extends javax.swing.JInternalFrame {
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(79, 79, 79)
+                        .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -340,7 +389,8 @@ public class JIFramePrestamos extends javax.swing.JInternalFrame {
                 .addGroup(panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4))
+                        .addComponent(jLabel4)
+                        .addComponent(jButton1))
                     .addGroup(panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(txtFecha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
                         .addGroup(panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -500,12 +550,11 @@ public class JIFramePrestamos extends javax.swing.JInternalFrame {
 
     private void tblEjemplarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEjemplarMouseClicked
         // TODO add your handling code here:
-
         int fila = this.tblEjemplar.rowAtPoint(evt.getPoint());
 
         try {
             int cantidadExistente = Integer.parseInt(String.valueOf(this.tblEjemplar.getValueAt(fila, 6)));
-            String CantLibroPrestamos = "";
+            //String CantLibroPrestamos = "";
             int cantidad;
 
             if (cantidadExistente == 1 || cantidadExistente == 0) {
@@ -534,10 +583,21 @@ public class JIFramePrestamos extends javax.swing.JInternalFrame {
                 cantidad = Integer.parseInt(CantLibroPrestamos);
 
                 if (cantidadExistente >= cantidad && cantidad > 0) {
-                    modelTablaDetallePrestamo.addRow(new Object[]{txtCodigoPrestamo.getText(),
-                        tblEjemplar.getValueAt(tblEjemplar.getSelectedRow(), 0),
-                        tblEjemplar.getValueAt(tblEjemplar.getSelectedRow(), 3), cantidad});
-                    tblDetPrestamos.setModel(modelTablaDetallePrestamo);
+
+                    if (VerificarArticuloRegistradoTabla() == false) {
+                        //
+                       
+                        modelTablaDetallePrestamo.addRow(new Object[]{txtCodigoPrestamo.getText(),
+                            tblEjemplar.getValueAt(tblEjemplar.getSelectedRow(), 0),
+                            tblEjemplar.getValueAt(tblEjemplar.getSelectedRow(), 3), cantidad});
+                        tblDetPrestamos.setModel(modelTablaDetallePrestamo);
+                        
+                        
+                       
+                    } 
+                    else {
+                        ActualizarCantidadProdTabla(tblEjemplar.getValueAt(tblEjemplar.getSelectedRow(), 0).toString(),CantLibroPrestamos);      
+                    }
 
                 } else {
                     JOptionPane.showMessageDialog(null, "No tiene suficiente ejemplares", "Msj.", JOptionPane.WARNING_MESSAGE);
@@ -577,7 +637,7 @@ public class JIFramePrestamos extends javax.swing.JInternalFrame {
     private void txtBuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscadorKeyReleased
         // TODO add your handling code here:
         //if (cbxCodigo.isSelected()) {
-            this.tblEjemplar.setModel(objEjemplar.ConsultaEjemplarPorNombre(txtBuscador.getText()));
+        this.tblEjemplar.setModel(objEjemplar.ConsultaEjemplarPorNombre(txtBuscador.getText()));
 //        } else {
 //            objUsuario.getTablaUsuarios();
 //        }
@@ -602,9 +662,28 @@ public class JIFramePrestamos extends javax.swing.JInternalFrame {
         txtAdministrador.setText(JPanelLogin.txtUsuario.getText());
     }//GEN-LAST:event_formInternalFrameOpened
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if (this.tblDetPrestamos.getRowCount() > 0) {
+            int fila = this.tblDetPrestamos.getRowCount();
+            DefaultTableModel detalle = (DefaultTableModel) this.tblDetPrestamos.getModel();
+            DefaultTableModel ejemplar = (DefaultTableModel) this.tblEjemplar.getModel();
+            for (int f = 0; f < fila; f++) {
+                
+                JOptionPane.showMessageDialog(this, String.valueOf(detalle.getValueAt(f, 1))+"_________"+String.valueOf(ejemplar.getValueAt(f, 0)));
+                   
+                //Validamos que el registro este en la tabla detalle
+                //if (String.valueOf(detalle.getValueAt(f, 1)).trim().equals(String.valueOf(tblEjemplar.getValueAt(f, 0)))) {
+                     
+                //}
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
