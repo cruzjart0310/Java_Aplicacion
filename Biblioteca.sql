@@ -327,3 +327,82 @@ ALTER TABLE `devolucion`
 ALTER TABLE `prestamo`
   ADD CONSTRAINT `fk_Prestamo_Usuario` FOREIGN KEY (`IdUsuario`) REFERENCES `usuario` (`idUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 --
+
+
+from django.db import models
+from datetime import datetime
+
+'''Model Usuario'''
+class Usuario(models.Model):
+    clave = models.CharField(max_length=10)
+    usuario = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=100)
+    apellido_paaterno = models.CharField(max_length=100)
+    apellido_materno = models.CharField(max_length=100)
+    password = models.CharField(max_length=255)
+    email = models.CharField(max_length=100)
+    status = models.BooleanField(default=False)
+    rol = models.CharField(max_length=3)
+
+class Profile(models.Model):
+    domicilio = models.CharField(200)
+    carrera = models.CharField(max_length=200)
+    grado = models.CharField(max_length=1)
+    grupo = models.CharField(max_length=1)
+    avatar = models.CharField(max_length=200)
+    usuario = models.OneToOneField(
+        Usuario,
+        on_delete=models.CASCADE,
+        related_name='Usuario'
+    )
+
+
+'''Model ejemplar'''
+class Ejemplar(models.Model):
+    isbn = models.CharField(max_length=50)
+    clasificacion = models.CharField(max_length=2)
+    titulo = models.CharField(max_length=200)
+    autor = models.CharField(max_length=100)
+    editorial = models.CharField(max_length=100)
+    cantidad_inventario = models.IntegerField()
+    cantidad_existente = models.IntegerField()
+    estadistica = models.IntegerField()
+
+'''Model Prestamo'''
+class Prestamo(models.Model):
+    prestamo_id = models.CharField(max_length=10)
+    ejemplar_id = models.CharField(max_length=50)
+    usuario_id = models.IntegerField()
+    cantidad_prestamo = models.IntegerField()
+    fecha_prestamo = models.DateField(default=datetime.now)
+    ejemplar = models.ManyToManyField(
+        Ejemplar,
+        related_name="Prestamo"
+    )
+    usuario = models.ManyToManyField(
+        Usuario,
+        related_name= 'Prestamo'
+    )
+
+class Devolucion(models.Model):
+    devolucion_id = models.CharField(max_length=10)
+    prestamo_id = models.IntegerField()
+    ejemplar_id = models.IntegerField()
+    usuario_id = models.IntegerField()
+    cantidad_devuelta = models.IntegerField()
+    fecha_devolucion = models.DateField(default=datetime.now)
+    prestamo = models.ManyToManyField(
+        Ejemplar,
+        related_name="Devolucion"
+    )
+    ejemplar = models.ManyToManyField(
+        Ejemplar,
+        related_name="Devolucion"
+    )
+    usuario = models.ManyToManyField(
+        Usuario,
+        related_name= 'Devolucion'
+    )
+
+
+
